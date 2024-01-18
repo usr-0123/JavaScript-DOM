@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // create elements
         const value = addForm.querySelector('input[type="text"]').value;
+
         const li = document.createElement('li');
         const movieName = document.createElement('span');
         const deleteBtn = document.createElement('span');
@@ -33,6 +34,9 @@ document.addEventListener('DOMContentLoaded', function () {
         movieName.textContent = value;
         deleteBtn.textContent = 'delete';
         dateSpan.textContent = getCurrentDate();
+
+        // add the movie names to the local storage
+        localStorage.setItem('movies', JSON.stringify(value))
 
         // add classes
         movieName.classList.add('name');
@@ -48,26 +52,12 @@ document.addEventListener('DOMContentLoaded', function () {
         // Clear input
         addForm.querySelector('input[type="text"]').value = '';
 
-        // To include the separator
         
-        if (inputValue !== "") {
-            // Add movie with current date
-            const movieWithDate = inputValue + " - " + getCurrentDate();
-            addMovie(movieWithDate);
-        }
-
-        saveToLocalStorage();
-
     })
-    // Function to save movie list to local storage
-    function saveToLocalStorage() {
-        const movies = Array.from(list.children).map(function (li) {
-            const movieName = li.querySelector('.name').textContent;
-            const date = li.querySelector('.date').textContent;
-            return { movieName, date };
-        });
 
-        localStorage.setItem('movies', JSON.stringify(movies));
+    function getFromLocalStorage(value) {
+    const storedValue = localStorage.getItem(value);
+        return JSON.parse(storedValue);
     }
 
 });
