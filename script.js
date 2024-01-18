@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
     //Fetch the date
     function getCurrentDate() {
         const now = new Date();
-        const options = { year: 'numeric', month: 'short', day: 'numeric'};
+        const options = { year: 'numeric', month: 'numeric', day: 'numeric'};
         return now.toLocaleDateString('en-US', options);
         }
 
@@ -45,17 +45,29 @@ document.addEventListener('DOMContentLoaded', function () {
         li.appendChild(dateSpan);
         list.appendChild(li);
 
+        // Clear input
+        addForm.querySelector('input[type="text"]').value = '';
+
         // To include the separator
         
         if (inputValue !== "") {
             // Add movie with current date
             const movieWithDate = inputValue + " - " + getCurrentDate();
             addMovie(movieWithDate);
-
-            // Clear input
-            addForm.querySelector('input[type="text"]').value = '';
         }
 
+        saveToLocalStorage();
+
     })
+    // Function to save movie list to local storage
+    function saveToLocalStorage() {
+        const movies = Array.from(list.children).map(function (li) {
+            const movieName = li.querySelector('.name').textContent;
+            const date = li.querySelector('.date').textContent;
+            return { movieName, date };
+        });
+
+        localStorage.setItem('movies', JSON.stringify(movies));
+    }
 
 });
